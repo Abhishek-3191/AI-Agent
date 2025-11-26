@@ -15,59 +15,70 @@ import {
 import { Input } from '@/components/ui/input'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import {v4 as uuidv4} from 'uuid';
-import { useRouter } from 'next/router'
+import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation'   // ✅ IMPORTANT: use next/navigation
 import { UserDetailContext } from '@/context/UserDetailContext'
  
 const CreateAgentSection = () => {
-    const [openDialog,setOpenDialog]=useState(false);
-    const CreateAgentMutation=useMutation(api.agent.CreateAgent);
-    const [agentName,setAgentName]=useState<string>();
-    const [loader,setLoader]=useState(false);
-    const {userDetail,setUserDetail}=useContext(UserDetailContext);
 
-    const CreateAgent=async()=>{
-    const agentId=uuidv4(); //Generate unique id
-    const router=useRouter();
-   setLoader(true);
+  const router = useRouter();                     // ✅ MOVE HOOK TO TOP
+  const [openDialog, setOpenDialog] = useState(false);
+  const CreateAgentMutation = useMutation(api.agent.CreateAgent);
+  const [agentName, setAgentName] = useState<string>();
+  const [loader, setLoader] = useState(false);
+  const { userDetail } = useContext(UserDetailContext);
 
-    const result=await CreateAgentMutation({
-        agentId:agentId,
-        name:agentName?? '',
-        userId:userDetail?._id
-    })
+  const CreateAgent = async () => {
+    const agentId = uuidv4();
+    setLoader(true);
+
+    await CreateAgentMutation({
+      agentId: agentId,
+      name: agentName ?? '',
+      userId: userDetail?._id
+    });
+
+    setLoader(false);
     setOpenDialog(false);
-     setLoader(false);
-    //Navigate to agent builder screen
-    router.push('/agent-builder'+agentId);
-    }
+
+    // Navigate
+    router.push('/agent-builder/' + agentId);     // ✅ FIXED URL + router works now
+  };
+
   return (
     <div className='space-y-2 flex flex-col justify-center items-center mt-24'>
-    <h2 className='font-bold text-xl'>Create AI agent</h2>
-    <p className="text-lg">Build AI workflow with custom logic and tools</p>
+      <h2 className='font-bold text-xl'>Create AI agent</h2>
+      <p className="text-lg">Build AI workflow with custom logic and tools</p>
     
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-  <DialogTrigger asChild><Button size={'lg'} onClick={()=>setOpenDialog}><Plus/>Create</Button></DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Enter agent name</DialogTitle>
-      <DialogDescription>
-      <Input placeholder='Enter the name' onChange={(event)=>setAgentName(event.target.value)}/>
-      </DialogDescription>
-    </DialogHeader>
-     <DialogFooter>
-        <DialogClose asChild>
-    <Button onClick={()=>CreateAgent()} disabled={loader}>
-        {loader && <Loader2Icon className='animate-spin'/>}
-        Create</Button>
-    </DialogClose >
-      <Button variant={'ghost'}>Cancel</Button>
-  </DialogFooter>
-  </DialogContent>
- 
-</Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogTrigger asChild>
+          <Button size={'lg'}><Plus />Create</Button>
+        </DialogTrigger>
+
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enter agent name</DialogTitle>
+            <DialogDescription>
+              <Input placeholder='Enter the name'
+                onChange={(e) => setAgentName(e.target.value)}
+              />
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button onClick={CreateAgent} disabled={loader}>
+                {loader && <Loader2Icon className='animate-spin' />}
+                Create
+              </Button>
+            </DialogClose>
+            <Button variant={'ghost'}>Cancel</Button>
+          </DialogFooter>
+        </DialogContent>
+
+      </Dialog>
     </div>
   )
 }
 
-export default CreateAgentSection
+export default CreateAgentSection;
