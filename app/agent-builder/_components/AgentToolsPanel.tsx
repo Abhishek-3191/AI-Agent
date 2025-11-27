@@ -1,10 +1,11 @@
+import { WorkFlowContext } from '@/context/WorkFlowContext';
 import { Merge, MousePointer, Repeat, Square, ThumbsUp, Webhook } from 'lucide-react';
-import React from 'react'
+import React, { useContext } from 'react'
 const AgentTools=[
 {
   name:'Agent',
   icon:MousePointer,
-  bgColor:'#CD7E3',
+  bgColor:'#CDF7E3',
   id:'agent',
   type:'AgentNode'
 },
@@ -46,18 +47,32 @@ const AgentTools=[
 },
 ];
 const AgentToolsPanel = () => {
+
+  const {addedNodes,setAddedNodes}=useContext(WorkFlowContext);
+
+  const onAgentToolClick=(tool:any)=>{
+    const newNode={
+      id:`${tool.id}-${Date.now()}`,
+      position:{x:0,y:100},
+      data:{label:tool.name,...tool},
+      type:tool.type
+    }
+    setAddedNodes((prev:any)=>[...prev,newNode])
+  }
+
   return (
     <div className='bg-white p-5 rounded-2xl shadow'>
       <h2 className="font-semibold mb-4 text-gray-700">AI Agent Tools</h2>
 
       <div>
         {AgentTools.map((tool, index) => (
-          <div key={index} className="flex items-center gap-2 mb-3">
+          <div key={index} className="flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 rounder-xl" 
+          onClick={()=>onAgentToolClick(tool)}>
             <tool.icon
               className='p-2 rounded-lg h-8 w-8'
               style={{ backgroundColor: tool.bgColor }}
             />
-            <span className="text-gray-700 font-medium">{tool.name}</span>
+            <h2 className="text-gray-700 font-medium text-sm">{tool.name}</h2>
           </div>
         ))}
       </div>

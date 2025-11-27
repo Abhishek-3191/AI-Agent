@@ -13,6 +13,8 @@ AgentTable:defineTable({
     name:v.string(),
     agentId:v.string(),
     config:v.optional(v.any()),
+    nodes:v.optional(v.any()),
+    edges:v.optional(v.any()),
     published:v.boolean(),
     userId:v.id('UserTable')
 })
