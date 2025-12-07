@@ -41,16 +41,17 @@
 
 import { Button } from '@/components/ui/button'
 import { Agent } from '@/types/AgentType'
-import { ChevronLeft, Code2, Play } from 'lucide-react'
+import { ChevronLeft, Code2, Play, X } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import AgentToolsPanel from './AgentToolsPanel'
 
 type Props = {
-  agentDetail: Agent | undefined
+  agentDetail: Agent | undefined,
+  previewHeader?:boolean,
 }
 
-const Header = ({ agentDetail }: Props) => {
+const Header = ({ agentDetail,previewHeader=false }: Props) => {
   return (
     <div className="w-full p-3 bg-white shadow flex items-center justify-between gap-4">
 
@@ -71,11 +72,19 @@ const Header = ({ agentDetail }: Props) => {
           <Code2 /> Code
         </Button>
 
-        <Link href={agentDetail ? `/agent-builder/${agentDetail.agentId}/preview` : "#"}>
-          <Button disabled={!agentDetail}>
+  {  !previewHeader?    <Link href= {`/agent-builder/${agentDetail?.agentId}/preview`}>
+          <Button>
             <Play /> Preview
           </Button>
         </Link>
+        :
+        <Link href={`/agent-builder/${agentDetail?.agentId}`}>
+          <Button variant={'outline'}>
+            <X /> Close Preview
+          </Button>
+        </Link>}
+
+  
 
         <Button>
           Publish

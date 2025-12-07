@@ -1,3 +1,4 @@
+"use client"
 import { WorkFlowContext } from '@/context/WorkFlowContext';
 import { ChevronsLeftRightEllipsis, Circle, HatGlasses, Infinity, Merge, MousePointer, Repeat, Signature, Square, ThumbsUp, Webhook } from 'lucide-react';
 import React, { useContext } from 'react'
