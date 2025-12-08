@@ -39,7 +39,7 @@ const MenuOptions = [
   },
   {
     title: "AI Agents",
-    url: "#",
+    url: "/dashboard/my-agents",
     icon: Headphones,
   },
   {

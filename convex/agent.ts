@@ -43,3 +43,31 @@ export const GetAgentById=query({
     return result[0];
     }
 })
+
+
+export const UpdateAgentDetail=mutation({
+    args:{
+        id:v.id('AgentTable'),
+        nodes:v.any(),
+        edges:v.any()
+    },
+    handler:async(ctx,args)=>{
+     await ctx.db.patch(args.id,{
+        edges:args.edges,
+        nodes:args.nodes
+     })
+    }
+})
+
+
+export const UpdateAgentToolConfig=mutation({
+    args:{
+        id:v.id('AgentTable'),
+        agentToolConfig:v.any(),
+    },
+    handler:async(ctx,args)=>{
+     await ctx.db.patch(args.id,{
+       agentToolConfig:args.agentToolConfig
+     })
+    }
+})

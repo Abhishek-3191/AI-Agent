@@ -1,3 +1,5 @@
-import React, { createContext } from 'react'
+"use client"
+import React, { createContext } from 'react';
 
-export const WorkFlowContext=createContext<any>(null)
+export const WorkFlowContext = createContext<any>(null);
+
