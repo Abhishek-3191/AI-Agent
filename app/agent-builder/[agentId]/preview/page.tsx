@@ -394,7 +394,7 @@ const PreviewAgent = () => {
 
     await updateAgentToolConfig({
       id: agentDetail?._id as any,
-      agentToolConfig: result.data
+      agentToolConfig: result?.data
     });
 
     console.log("🟣 Updated agentToolConfig in Convex");

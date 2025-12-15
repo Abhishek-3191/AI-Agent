@@ -11,6 +11,7 @@ export async function POST(req:NextResponse) {
     })
     // console.log(agentDetail);
     let conversationId_=null;
+    // @ts-ignore
     const conversationDetail=await fetchQuery(api.conversation.GetConversationById,{
         agentId:agentDetail._id,
         userId:userId

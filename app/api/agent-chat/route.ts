@@ -3,12 +3,12 @@ import { Agent, tool, run } from "@openai/agents";
 import z from 'zod';
 import { openai } from "@/config/OpenAiModel";
 
-export async function POST(req:NextRequest) {
+export async function POST(req:Request) {
     const body = await req.json();
     console.log("🔥 FRONTEND SENT:", JSON.stringify(body, null, 2));
 
     // const { input, tools, agents, conversationId, agentName } = body;
-    const {input,tools,agents,conversationId,agentName}=await req.json();
+    const {input,tools=[],agents=[],conversationId,agentName}=body;
 
     const generatedTools = tools.map((t: any) => {
     // Dynamically build zod object for parameters

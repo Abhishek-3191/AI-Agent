@@ -42,15 +42,15 @@ const MenuOptions = [
     url: "/dashboard/my-agents",
     icon: Headphones,
   },
+  // {
+  //   title: "Pricing",
+  //   url: "#",
+  //   icon: WalletCards,
+  // },
   {
-    title: "Pricing",
-    url: "#",
-    icon: WalletCards,
-  },
-  {
-    title: "Data",
-    url: "#",
-    icon: Database,
+    title: "Profile",
+    url: "/dashboard/my-agents",
+    icon: UserButton,
   },
 ];
 

@@ -25,50 +25,97 @@ function ChatUI({GenerateAgentToolConfig,loading,agentDetail,conversationId}:Pro
      const [userInput,setUserInput]=useState<string>('');
      const [messages,setMessages]=useState<{role:string,content:string}[]>([]);
 
-     const OnSendMsg=async()=>{
-      setLoadingMsg(true);
-      setMessages([...messages,{role:'user',content:userInput}])
-      setUserInput('');
-      const res=await fetch('app/api/agent-chat',{
-        method:'POST',
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-          agentName:agentDetail?.name,
-          agents:agentDetail?.config?.agents || [],
-          tools:agentDetail?.config?.tools || [],
-          input:userInput,
-          conversationId:conversationId
-        })
-      })
-      if(!res.body){
-        return;
-      }
-      const reader=res.body.getReader();
-      const decoder=new TextDecoder();
-      let done=false;
-      while(!done){
-        const {value,done:doneReading}=await reader.read();
-        done=doneReading;
-        if(value){
-            console.log(decoder.decode(value));
-            const chunk=decoder.decode(value);
-            setMessages((prev)=>{
-              const updated=[...prev];
-              updated[updated.length-1]={
-                role:'assistant',
-                content:(updated[updated.length-1]?.content || '')+chunk
-              }
-              return updated;
-            })
-        }
+    //  const OnSendMsg=async()=>{
+    //   setLoadingMsg(true);
+    //   setMessages([...messages,{role:'user',content:userInput}])
+    //   setUserInput('');
+    //   const res=await fetch('api/agent-chat',{
+    //     method:'POST',
+    //     headers:{
+    //       "Content-Type":"application/json"
+    //     },
+    //     body:JSON.stringify({
+    //       agentName:agentDetail?.name,
+    //       agents:agentDetail?.config?.agents || [],
+    //       tools:agentDetail?.config?.tools || [],
+    //       input:userInput,
+    //       conversationId:conversationId
+    //     })
+    //   })
+    //   if(!res.body){
+    //     return;
+    //   }
+    //   const reader=res.body.getReader();
+    //   const decoder=new TextDecoder();
+    //   let done=false;
+    //   while(!done){
+    //     const {value,done:doneReading}=await reader.read();
+    //     done=doneReading;
+    //     if(value){
+    //         console.log(decoder.decode(value));
+    //         const chunk=decoder.decode(value);
+    //         setMessages((prev)=>{
+    //           const updated=[...prev];
+    //           updated[updated.length-1]={
+    //             role:'assistant',
+    //             content:(updated[updated.length-1]?.content || '')+chunk
+    //           }
+    //           return updated;
+    //         })
+    //     }
         
-      }
-      setLoadingMsg(false);
-     }
+    //   }
+    //   setLoadingMsg(false);
+    //  }
+const OnSendMsg = async () => {
+  if (!userInput.trim()) return;
 
+  setLoadingMsg(true);
 
+  setMessages(prev => [
+    ...prev,
+    { role: 'user', content: userInput },
+    { role: 'assistant', content: '' }
+  ]);
+
+  const input = userInput;
+  setUserInput('');
+
+  const res = await fetch('/api/agent-chat', {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      agentName: agentDetail?.name,
+      agents: agentDetail?.config?.agents || [],
+      tools: agentDetail?.config?.tools || [],
+      input,
+      conversationId
+    })
+  });
+
+  if (!res.body) return;
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value);
+    console.log("chunk:", chunk);
+    setMessages(prev => {
+      const updated = [...prev];
+      updated[updated.length - 1] = {
+        role: 'assistant',
+        content: updated[updated.length - 1].content + chunk
+      };
+      return updated;
+    });
+  }
+
+  setLoadingMsg(false);
+};
 
   return (
     <>
