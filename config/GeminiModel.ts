@@ -1,13 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-if (!process.env.GOOGLE_API_KEY) {
-  throw new Error("Missing GOOGLE_API_KEY in environment");
-}
+export const geminiAI = new GoogleGenAI({apiKey:process.env.GOOGLE_API_KEY});
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-
-export const geminiModel = genAI.getGenerativeModel({
-  // stable model identifier compatible with the v1 SDK
-  model: "gemini-1.5-flash-8b",
-
-});

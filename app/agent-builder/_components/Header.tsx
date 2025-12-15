@@ -49,9 +49,10 @@ import AgentToolsPanel from './AgentToolsPanel'
 type Props = {
   agentDetail: Agent | undefined,
   previewHeader?:boolean,
+  onPublish:()=>void
 }
 
-const Header = ({ agentDetail,previewHeader=false }: Props) => {
+const Header = ({ agentDetail,previewHeader=false,onPublish }: Props) => {
   return (
     <div className="w-full p-3 bg-white shadow flex items-center justify-between gap-4">
 
@@ -86,7 +87,7 @@ const Header = ({ agentDetail,previewHeader=false }: Props) => {
 
   
 
-        <Button>
+        <Button onClick={onPublish}>
           Publish
         </Button>
       </div>
