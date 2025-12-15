@@ -49,7 +49,7 @@ const MenuOptions = [
   // },
   {
     title: "Profile",
-    url: "/dashboard/my-agents",
+    url: "/dashboard/profile",
     icon: UserButton,
   },
 ];
@@ -90,14 +90,14 @@ const AppSidebar = () => {
             })}
 
             {/* Profile / User Button */}
-            <SidebarMenuItem>
+            {/* <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <div className="flex items-center gap-2 cursor-pointer">
                   <UserButton afterSignOutUrl="/" />
                   <span>Profile</span>
                 </div>
               </SidebarMenuButton>
-            </SidebarMenuItem>
+            </SidebarMenuItem> */}
           </SidebarMenu>
         </SidebarGroupContent>
 
